@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  waytranslate 托盘小图 — 16px symbolic 变体
+  建议安装：hicolor/symbolic/apps/waytranslate-symbolic.svg
+
+  设计：气泡剪影 + 一条镂空文本线（evenodd 负形），16px 下单元素可读。
+  单色 #e6e9ec 适配 KDE Plasma 深色面板（Breeze Dark）；
+  浅色面板可将 fill 改为 #232629，或改为 currentColor 交由主题着色。
+  作为 SNI 托盘图标时 Plasma 不会自动重着色，浅色面板需单独提供深色版。
+-->
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+  <path fill="#e6e9ec" fill-rule="evenodd"
+        d="M4 1.5 h8 a3 3 0 0 1 3 3 v3.5 a3 3 0 0 1 -3 3 H7.6 L4.4 14.8 5.2 11
+           H4 a3 3 0 0 1 -3-3 V4.5 a3 3 0 0 1 3-3 Z
+           M5.4 5.6 h5.2 a0.9 0.9 0 0 1 0 1.8 H5.4 a0.9 0.9 0 0 1 0-1.8 Z"/>
+</svg>

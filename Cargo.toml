@@ -1,0 +1,55 @@
+[package]
+name = "waytranslate"
+version = "0.2.0"
+edition = "2024"
+description = "Select text anywhere on Wayland, get an inline translation popup"
+license = "MIT"
+
+[dependencies]
+# UI
+gtk4 = { version = "0.11", features = ["v4_14"] }
+gtk4-layer-shell = "0.8"
+# Wayland protocols (second connection, owned by us)
+wayland-client = "0.31"
+wayland-backend = "0.3"
+wayland-protocols-wlr = { version = "0.3", features = ["client"] }
+wayland-protocols = { version = "0.32", features = ["client", "staging"] }
+calloop = "0.14"
+calloop-wayland-source = "0.4"
+async-channel = "2"
+
+# Input observation
+evdev = "0.13"
+rustix = { version = "1", features = ["pipe", "process"] }
+
+# Translation backends
+tokio = { version = "1", features = ["rt-multi-thread", "macros", "sync", "time"] }
+reqwest = { version = "0.13", default-features = false, features = ["rustls", "json", "form", "query", "stream"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+toml = "1"
+futures-util = "0.3"
+
+# Plumbing
+clap = { version = "4", features = ["derive"] }
+async-trait = "0.1"
+anyhow = "1"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+dirs = "7"
+ksni = "0.3"
+png = "0.18"
+md5 = "0.8"
+hmac = "0.13"
+sha2 = "0.11"
+hex = "0.4"
+gettext-rs = "0.8"
+gettext-sys = "0.27"
+mouse-coords = { git = "https://github.com/xycld/mouse-coords" }
+
+[profile.release]
+strip = true
+lto = true
+codegen-units = 1
+panic = "abort"
+

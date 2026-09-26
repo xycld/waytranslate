@@ -1,0 +1,15 @@
+[Desktop Entry]
+Type=Application
+Name=waytranslate
+GenericName=Selection Translator
+Comment=Wayland 划词翻译 — 选中文字，弹窗译文
+Exec=waytranslate run
+Icon=waytranslate
+Categories=Utility;
+StartupNotify=true
+Actions=settings;
+
+[Desktop Action settings]
+Name=设置
+Exec=waytranslate settings
+Icon=configure

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  waytranslate 应用图标 — 48px 网格设计稿
+  安装路径：hicolor/scalable/apps/waytranslate.svg
+
+  意象：单一译文气泡承载全部识别度 —— 浅色气泡（深/浅底都可读）
+        + 一条 accent 蓝文本线（#3daee9，极简细节，暗示译文）。
+  透明底，无底板/箭头/角标等任何其他元素。
+  小尺寸（16px 托盘）请改用 icon-16.svg 的单色剪影变体。
+-->
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
+  <defs>
+    <linearGradient id="bubble" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#dde3e8"/>
+    </linearGradient>
+  </defs>
+
+  <!-- 气泡：浅色渐变，细暗描边保证浅色底上的轮廓 -->
+  <path fill="url(#bubble)" stroke="#1e2024" stroke-opacity="0.16" stroke-width="1"
+        d="M14 7 h20 a9 9 0 0 1 9 9 v10 a9 9 0 0 1 -9 9 H24 L14.5 43.5 l2.2-8.5
+           H14 a9 9 0 0 1 -9-9 V16 a9 9 0 0 1 9-9 Z"/>
+
+  <!-- accent 蓝文本线：唯一细节，暗示译文内容 -->
+  <rect x="13" y="19" width="22" height="4" rx="2" fill="#3daee9"/>
+</svg>

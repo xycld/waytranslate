@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=waytranslate
+Comment=Wayland 划词翻译弹窗
+Exec=waytranslate run
+Icon=waytranslate
+X-GNOME-Autostart-enabled=true
+NoDisplay=true
+StartupNotify=false

@@ -1,0 +1,185 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: waytranslate 0.1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language: zh_CN\n"
+
+msgid "waytranslate Settings"
+msgstr "waytranslate 设置"
+
+msgid "Translation"
+msgstr "翻译"
+
+
+msgid "General"
+msgstr "通用"
+
+msgid "Backend"
+msgstr "翻译后端"
+
+msgid "Direction"
+msgstr "翻译方向"
+
+
+
+
+
+
+msgid "Minimum characters"
+msgstr "最小触发字符数"
+
+msgid "Autostart"
+msgstr "开机自启动"
+
+msgid "Custom API: edit config.toml (see template)"
+msgstr "自定义接口：见 config.toml 模板注释"
+
+msgid "Save"
+msgstr "保存"
+
+
+msgid "Google (free)"
+msgstr "Google（免费）"
+
+msgid "Bing (free)"
+msgstr "Bing（免费）"
+
+
+msgid "DeepLX (free)"
+msgstr "DeepLX（免费）"
+
+msgid "NiuTrans"
+msgstr "小牛翻译"
+
+msgid "Tencent"
+msgstr "腾讯机器翻译"
+
+msgid "Volcengine"
+msgstr "火山引擎"
+
+msgid "Baidu"
+msgstr "百度翻译"
+
+
+msgid "Custom"
+msgstr "自定义"
+
+msgid "Auto (zh  ↔  en)"
+msgstr "自动（中  ↔  英）"
+
+msgid "Always to Chinese"
+msgstr "总是译成中文"
+
+msgid "Always to English"
+msgstr "总是译成英文"
+
+
+
+
+msgid "LibreTranslate URL"
+msgstr "LibreTranslate 地址"
+
+msgid "DeepLX URL"
+msgstr "DeepLX 地址"
+
+msgid "Microsoft region"
+msgstr "Microsoft 区域"
+
+msgid "NiuTrans key"
+msgstr "小牛 Key"
+
+msgid "Tencent SecretId"
+msgstr "腾讯 SecretId"
+
+msgid "Tencent SecretKey"
+msgstr "腾讯 SecretKey"
+
+msgid "Volcengine AccessKey"
+msgstr "火山 AccessKey"
+
+msgid "Volcengine SecretKey"
+msgstr "火山 SecretKey"
+
+msgid "Baidu AppID"
+msgstr "百度 AppID"
+
+msgid "Baidu Key"
+msgstr "百度 Key"
+
+msgid "Model"
+msgstr "模型"
+
+msgid "from deepl.com"
+msgstr "从 deepl.com 获取"
+
+msgid "from Azure portal"
+msgstr "从 Azure 门户获取"
+
+msgid "from niutrans.com"
+msgstr "从 niutrans.com 获取"
+
+msgid "from Tencent Cloud"
+msgstr "从腾讯云控制台获取"
+
+msgid "from Volcengine console"
+msgstr "从火山引擎控制台获取"
+
+msgid "from Baidu open platform"
+msgstr "从百度翻译开放平台获取"
+
+msgid "optional"
+msgstr "可选"
+
+msgid "optional for local models"
+msgstr "可留空（本地模型通常无鉴权）"
+
+msgid "optional, e.g. eastasia"
+msgstr "可选，如 eastasia"
+
+msgid "Translate"
+msgstr "翻译"
+
+msgid "Copy translation"
+msgstr "复制译文"
+
+msgid "Pin: keep visible (click to unpin)"
+msgstr "钉住：不随选区消失（再点解除）"
+
+msgid "Close"
+msgstr "关闭"
+
+msgid "Retry"
+msgstr "重试"
+
+msgid "Translation failed"
+msgstr "翻译失败"
+
+msgid "Translation failed: "
+msgstr "翻译失败："
+
+msgid "waytranslate — Selection Translator"
+msgstr "waytranslate 划词翻译"
+
+msgid "Paused — no popup on selection"
+msgstr "已暂停 — 划词不弹窗"
+
+msgid "Running — select text, click the ball to translate"
+msgstr "运行中 — 划词出小球，点击出译文"
+
+msgid "Settings…"
+msgstr "设置…"
+
+msgid "Pause"
+msgstr "暂停划词"
+
+msgid "Resume"
+msgstr "恢复划词"
+
+msgid "Quit"
+msgstr "退出"
+
+msgid "Language"
+msgstr "界面语言"
+
+msgid "Follow system"
+msgstr "跟随系统"

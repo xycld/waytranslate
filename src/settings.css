@@ -1,0 +1,57 @@
+/* waytranslate 设置页 —— GTK4 Preferences 风格
+ * 结构：标题在卡片外（.waytranslate-pref-group-title），
+ * 卡片 .waytranslate-pref-card 内全是行，首尾行圆角由 :first-child/:last-child 给 */
+
+.waytranslate-settings {
+  background-color: #1e2024;
+  color: rgba(235, 238, 242, 0.92);
+}
+
+.waytranslate-settings-page {
+  padding: 18px 22px 22px;
+}
+
+.waytranslate-pref-group-title {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: rgba(235, 238, 242, 0.5);
+  margin: 14px 4px 6px;
+}
+
+/* 卡片：一整块圆角底板，行间细分隔线 */
+.waytranslate-pref-card {
+  background-color: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 13px;
+}
+.waytranslate-pref-row {
+  padding: 10px 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+.waytranslate-pref-row:last-child {
+  border-bottom: none;
+}
+
+.waytranslate-pref-label { font-size: 13.5px; }
+
+.waytranslate-pref-row entry,
+.waytranslate-pref-row dropdown {
+  min-width: 200px;
+}
+
+/* GtkEntry CSS tree: entry → text → placeholder. */
+.waytranslate-pref-row entry text placeholder {
+  color: rgba(235, 238, 242, 0.42);
+}
+
+/* 保存按钮 */
+.waytranslate-save {
+  background-color: #3daee9;
+  color: #fff;
+  border-radius: 8px;
+  padding: 8px 26px;
+  font-weight: 600;
+  border: none;
+  margin-top: 14px;
+}
+.waytranslate-save:hover { background-color: #4fc3f7; }

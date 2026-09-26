@@ -1,0 +1,234 @@
+/* ============================================================
+ * waytranslate — 划词翻译弹窗 GTK4 样式
+ * 对应设计稿 design/popup.html
+ *
+ * 用法：
+ *   GtkCssProvider 加载本文件；窗口/控件设置对应 style class：
+ *     window          → .waytranslate-popup
+ *     原文 GtkLabel   → .waytranslate-source
+ *     译文 GtkLabel   → .waytranslate-target
+ *     打字光标        → .waytranslate-caret（GtkDrawingArea / GtkLabel "|"）
+ *     骨架占位        → .waytranslate-skeleton（GtkBox，子条 .waytranslate-skeleton-bar）
+ *     错误区          → .waytranslate-error / .waytranslate-error-text / .waytranslate-retry
+ *     动作条          → .waytranslate-actions，按钮 .waytranslate-btn
+ *     置顶激活态      → .waytranslate-btn.active
+ *
+ * ── GTK CSS 不支持项与替代方案 ────────────────────────────────
+ *
+ * 1) backdrop-filter（毛玻璃）
+ *    GTK CSS 无 backdrop-filter。Wayland 下替代方案：
+ *    a) gtk4-layer-shell 将窗口置于 overlay 层，背景用本文件的
+ *       半透明实色 rgba(30,32,36,0.92) —— KDE Plasma 的 KWin
+ *       会对半透明窗口自动应用背景模糊（System Settings →
+ *       Workspace Behavior → Desktop Effects → Blur，默认开启），
+ *       因此多数情况下只需实色半透明背景即可获得毛玻璃观感。
+ *    b) 若需保证无模糊时也可读，将 alpha 提高到 0.96–0.98。
+ *    c) 不建议客户端自绘模糊（需截取下层画面，Wayland 协议不允许）。
+ *
+ * 2) @keyframes（出现上浮 8px / 光标闪烁 / 骨架微光）
+ *    GTK CSS 只支持 transition，不支持 keyframes。替代：
+ *    a) 出现动画：窗口初始 opacity 0 + 向上偏移 8px，
+ *       用 g_timeout_add / GtkWidget:show 后设置属性，由
+ *       transition: opacity 120ms ease-out, ... 完成；
+ *       位移可用 margin-top 8px→0 做过渡（120ms ease-out）。
+ *    b) 关闭动画：设置 .waytranslate-popup.closing 类，opacity→0，
+ *       transition 80ms ease-in，结束后 gtk_window_destroy()。
+ *    c) 光标闪烁：GTK 原生 GtkTextView 光标自带闪烁；独立光标
+ *       控件用 g_timeout_add(500ms) 切换 .waytranslate-caret 的
+ *       opacity（配 transition 可省，直接硬切更接近打字感）。
+ *    d) 骨架微光：简化为静态渐变条 + opacity 脉动
+ *       （g_timeout 切换 .dim 类），或接受静态骨架——出现时间
+ *       通常 <300ms，动效价值有限。
+ *
+ * 3) -webkit-line-clamp（原文 2 行截断）
+ *    用 GtkLabel 属性实现，不靠 CSS：
+ *      gtk_label_set_lines(label, 2);
+ *      gtk_label_set_ellipsize(label, PANGO_ELLIPSIZE_END);
+ *    「展开」时 set_lines(-1) 并去掉 ellipsize。
+ * ============================================================ */
+
+/* ---------- 弹窗容器 ---------- */
+.waytranslate-popup {
+  background-color: rgba(30, 32, 36, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 13px;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.45),
+              0 2px 8px  rgba(0, 0, 0, 0.30);
+  color: rgba(240, 242, 245, 0.96);
+
+  /* 出现/关闭过渡：位移在代码中通过 margin-top 8px→0 驱动 */
+  transition: opacity 120ms ease-out,
+              margin-top 120ms ease-out;
+}
+
+/* 关闭态：代码中添加此类，80ms 淡出后销毁窗口 */
+.waytranslate-popup.closing {
+  opacity: 0;
+  transition: opacity 80ms ease-in;
+}
+
+/* ---------- 原文区（次要文字，可折叠） ---------- */
+.waytranslate-source {
+  padding: 12px 14px 10px 14px;
+  font-size: 12.5px;
+  /* GTK CSS 无 line-height；行高 1.5 用 GtkLabel 的
+     gtk_label_set_line_wrap + 主题默认，或在代码中通过
+     PangoAttrList 设置 line-height 属性 */
+  color: rgba(235, 238, 242, 0.55);
+}
+
+/* 「展开 / 折叠」按钮 */
+.waytranslate-source-toggle {
+  padding: 0;
+  margin-top: 4px;
+  border: none;
+  background: none;
+  box-shadow: none;
+  font-size: 11.5px;
+  color: #3daee9;              /* KDE Breeze accent */
+  opacity: 0.85;
+}
+.waytranslate-source-toggle:hover {
+  opacity: 1;
+  text-decoration: underline;
+}
+
+/* ---------- 译文区（主体） ---------- */
+.waytranslate-target {
+  padding: 12px 14px 14px 14px;
+  font-size: 14.5px;
+  color: rgba(240, 242, 245, 0.96);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);  /* 有原文区时的分隔线 */
+}
+
+/* 流式加载光标：设计稿的 2px accent 竖线；闪烁由代码驱动。 */
+.waytranslate-caret {
+  min-width: 2px;
+  min-height: 1em;
+  margin-left: 6px;
+  border-radius: 1px;
+  background-color: #3daee9;
+  transition: opacity 80ms ease-out;
+}
+.waytranslate-caret.dim { opacity: 0; }
+
+/* 与 .waytranslate-target 使用同一内容盒，避免骨架贴边。 */
+.waytranslate-skeleton {
+  padding: 12px 14px 14px 14px;
+}
+.waytranslate-skeleton-bar {
+  min-height: 12px;
+  border-radius: 6px;
+  background-color: rgba(255, 255, 255, 0.08);
+  margin-bottom: 8px;
+}
+.waytranslate-skeleton-bar:last-child { margin-bottom: 0; }
+/* 三条宽度由代码设为 92% / 78% / 55%；容器 dim 时统一微光。 */
+.waytranslate-skeleton-bar {
+  transition: opacity 300ms ease-in-out;
+}
+.waytranslate-skeleton.dim .waytranslate-skeleton-bar {
+  opacity: 0.55;
+}
+
+/* ---------- 错误态 ---------- */
+.waytranslate-error {
+  color: rgba(235, 238, 242, 0.55);
+}
+.waytranslate-error image {                      /* 警告图标 */
+  color: #e0564f;
+}
+.waytranslate-error-text {
+  font-size: 13px;
+}
+.waytranslate-error-text .title {
+  color: rgba(240, 242, 245, 0.96);
+  font-weight: 500;
+}
+.waytranslate-retry {
+  margin-top: 10px;
+  padding: 5px 14px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 7px;
+  background-color: rgba(255, 255, 255, 0.08);
+  color: rgba(240, 242, 245, 0.96);
+  font-size: 12.5px;
+  transition: background-color 80ms ease-out;
+}
+.waytranslate-retry:hover  { background-color: rgba(255, 255, 255, 0.14); }
+.waytranslate-retry:active { background-color: rgba(255, 255, 255, 0.20); }
+
+/* ---------- 底部动作条 ---------- */
+.waytranslate-actions {
+  padding: 6px 8px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+/* 图标按钮：30×26，无边框，hover 浅底
+   图标用 GtkImage + 16px 描边 SVG（lucide），
+   -gtk-icon-size: 16px 或在代码中 set_pixel_size(16) */
+.waytranslate-btn {
+  min-width: 30px;
+  min-height: 26px;
+  padding: 0;
+  border: none;
+  border-radius: 6px;
+  background: none;
+  box-shadow: none;
+  color: rgba(235, 238, 242, 0.55);
+  transition: background-color 80ms ease-out,
+              color 80ms ease-out;
+}
+.waytranslate-btn:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+  color: rgba(240, 242, 245, 0.96);
+}
+.waytranslate-btn:active {
+  background-color: rgba(255, 255, 255, 0.14);
+}
+
+/* 置顶已激活：accent 蓝常亮 */
+.waytranslate-btn.active {
+  color: #3daee9;
+}
+
+/* 加载期间禁用复制/替换（代码中 set_sensitive(false) 亦可） */
+.waytranslate-btn:disabled {
+  opacity: 0.4;
+}
+
+/* ---------- 触发小图标（有道式划词图标） ---------- */
+.waytranslate-icon {
+  min-width: 28px;
+  min-height: 28px;
+  padding: 0;
+  border-radius: 14px;
+  font-size: 13px;
+  color: #fff;
+  background-color: #3daee9;
+  border: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+}
+.waytranslate-icon:hover { background-color: #4fc3f7; }
+
+/* ---------- 引擎选择器（底部动作条内） ---------- */
+.waytranslate-backend-dd {
+  font-size: 12px;
+}
+.waytranslate-backend-dd button {
+  padding: 3px 10px;
+  min-height: 0;
+  background-color: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  border-radius: 8px;
+  color: rgba(235, 238, 242, 0.85);
+}
+.waytranslate-backend-dd button:hover {
+  background-color: rgba(255, 255, 255, 0.12);
+}
+textview.waytranslate-source,
+.waytranslate-source text {
+  background-color: transparent;
+  color: rgba(235, 238, 242, 0.55);
+  font-size: 12.5px;
+}
