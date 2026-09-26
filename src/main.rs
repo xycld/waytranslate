@@ -25,7 +25,10 @@ enum Command {
     /// Run the daemon (default)
     Run,
     /// Probe this session's Wayland capabilities and report compatibility
-    Doctor,
+    Doctor {
+        #[command(subcommand)]
+        action: Option<DoctorAction>,
+    },
     /// Print primary-selection changes live (debug)
     Watch,
     /// Print pointer position + button events live (debug)
@@ -47,6 +50,12 @@ enum Command {
     Settings,
 }
 
+#[derive(Subcommand)]
+enum DoctorAction {
+    /// Auto-fix what's locally fixable (broken config, input group)
+    Fix,
+}
+
 fn main() -> anyhow::Result<()> {
     i18n::init();
     tracing_subscriber::fmt()
@@ -57,7 +66,10 @@ fn main() -> anyhow::Result<()> {
         .init();
 
     match Cli::parse().command.unwrap_or(Command::Run) {
-        Command::Doctor => doctor::run(),
+        Command::Doctor { action } => match action {
+            None => doctor::run(),
+            Some(DoctorAction::Fix) => doctor::fix(),
+        },
         Command::Watch => watch(),
         Command::Pointer { screen } => pointer_debug(&screen),
         Command::Translate { text, backend } => translate_once(&text, &backend),
