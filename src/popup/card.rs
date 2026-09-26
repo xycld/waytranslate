@@ -106,8 +106,8 @@ pub(super) fn build_card(
         .hexpand(true)
         .build();
     target.add_css_class("waytranslate-target");
-    // Loading indicator from design/popup.html: a 2px accent caret which
-    // blinks while the request is in flight. GTK CSS has no keyframes.
+    // Loading indicator: a 2px accent caret which blinks while the request
+    // is in flight. GTK CSS has no keyframes.
     let caret = gtk4::Box::new(gtk4::Orientation::Horizontal, 0);
     caret.add_css_class("waytranslate-caret");
     caret.set_valign(gtk4::Align::Center);

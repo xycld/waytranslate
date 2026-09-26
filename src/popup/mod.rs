@@ -2,7 +2,7 @@
 //! Two pages in one `GtkStack`:
 //!   "icon" — 28px circular icon shown on selection; hover/click expands
 //!   "card" — full translation card (source / streaming target / actions)
-//! Visual design: design/popup.gtk.css; styles embedded from popup.css.
+//! Visual design lives in popup.css, embedded at build time.
 
 mod card;
 mod icons;
